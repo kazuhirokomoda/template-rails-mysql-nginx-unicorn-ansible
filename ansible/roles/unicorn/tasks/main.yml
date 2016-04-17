@@ -1,0 +1,30 @@
+
+################################
+### Install Unicorn in Gemfile 
+################################
+
+
+###################
+### configuration
+###################
+
+- name: Send unicorn file
+  template:
+    src: unicorn.j2
+    dest: "/etc/init.d/unicorn"
+    mode: 0755
+  #notify: restart unicorn
+
+
+#############################
+# Register as a service
+#############################
+
+- name: reload Unicorn conf
+  service: name=unicorn state=reloaded
+
+- name: Register Unicorn as a service
+  service: name=unicorn state=started
+
+- name: update the rc.d startup configuration
+  command: update-rc.d unicorn defaults

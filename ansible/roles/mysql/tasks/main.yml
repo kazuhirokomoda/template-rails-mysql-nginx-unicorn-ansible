@@ -1,0 +1,24 @@
+
+- name: Install mysql
+  apt: name={{ item }} state=latest
+  with_items:
+    - libxslt-dev
+    - libxml2-dev
+    - libmysqld-dev
+    - libmysqlclient-dev
+    - mysql-server-5.6
+    - mysql-client-5.6
+    - python-mysqldb
+
+- name: Set mysql service to start on boot
+  service: name=mysql state=started enabled=true
+
+
+- name: Create database user
+  mysql_user: >
+    name={{ dbuser }}
+    password="{{ dbpassword }}"
+    priv=*.*:ALL
+    state=present
+#  tags: mysqld　
+

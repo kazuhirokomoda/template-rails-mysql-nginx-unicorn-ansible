@@ -1,0 +1,57 @@
+#############################
+# Add official nginx to repo
+#############################
+
+- name : Add official nginx PGP key
+  apt_key: url={{nginx_pgp_url}} state=present
+
+- name : Add official nginx repository
+  lineinfile : >
+    dest=/etc/apt/sources.list
+    line='{{item}} {{nginx_repository_url}} {{ansible_distribution_release}} nginx'
+  with_items:
+    - deb
+    - deb-src
+- name : Run apt-get update
+  apt: update_cache=yes
+
+- name : Install nginx
+  apt : name=nginx state=present
+
+###################
+### configuration
+###################
+
+- name: Send conf file
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}/nginx.conf"
+    mode: 0755
+    #notify: restart nginx
+
+- name: nginx config file directory
+  file: path=/etc/nginx/sites-available state=directory owner=root group=root mode=0755
+
+- name: Send default file
+  template:
+    src: default.j2
+    dest: "{{ nginx_conf_path }}/sites-available/default"
+    mode: 0755
+  notify: restart nginx
+
+#- name: Railsのルートディレクトリの所有者をwww-dataに変更 アクセス権限として755を設定
+#  file: path=/home/vagrant/railsapp state=directory recurse=yes owner=www-data group=www-data mode=0755
+- name: Railsのルートディレクトリの所有者をvagrantに変更 アクセス権限として755を設定
+  file: path=/home/vagrant/railsapp state=directory recurse=yes owner=vagrant group=vagrant mode=0755
+
+
+#############################
+# Register as a service
+#############################
+
+- name: reload Nginx conf
+  service: name=nginx state=reloaded
+
+- name: Register Nginx as a service
+  service: name=nginx state=started
+

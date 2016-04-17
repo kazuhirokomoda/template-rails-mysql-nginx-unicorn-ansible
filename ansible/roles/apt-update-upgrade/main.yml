@@ -1,0 +1,4 @@
+
+- name: update package list and upgrade all packages
+  apt: upgrade=dist update_cache=yes
+

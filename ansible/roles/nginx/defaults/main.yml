@@ -1,0 +1,12 @@
+
+#nginx_conf_path: '/usr/local/nginx/conf'
+nginx_conf_path: '/etc/nginx'
+nginx_worker_processes: 4
+nginx_keepaliive_timeout: 65
+
+# Add public nginx to repo (mainline version)
+# 'trusty': 14.04 
+nginx_pgp_url: 'http://nginx.org/keys/nginx_signing.key'
+nginx_repository_url: 'http://nginx.org/packages/mainline/ubuntu/'
+ansible_distribution_release: 'trusty'
+

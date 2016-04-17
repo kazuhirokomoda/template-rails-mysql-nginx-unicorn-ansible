@@ -1,0 +1,11 @@
+- name: Build a rails-mysql-nginx-unicorn development environment using Vagrant and Ansible
+  hosts: all
+  become: yes
+  #become_user: root
+  roles:
+    - apt-update-upgrade
+    - rbenv
+    - mysql
+    - nginx
+    - unicorn
+
